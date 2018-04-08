@@ -1,0 +1,26 @@
+body{
+    text-align: center
+}
+
+.form{
+    padding: 20px;
+    margin: auto;
+    width: 30%;
+    border: 1px solid grey;
+}
+
+input, select{
+    margin-bottom: 20px;
+    font: 16px;
+    padding: 5px;
+}
+
+button{
+    font: 20px;
+    font-size: large;
+    padding: 5px 20px;
+}
+
+h4{
+    color: red;
+}
