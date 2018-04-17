@@ -1,14 +1,25 @@
 import React from 'react'
 import axios from 'axios'
 import './Home.css'
+import CarList from './CarList'
 
 export default class Home extends React.Component{
   constructor(){
     super()
-    this.state = {action : "BOOKING_PAGE", assignedCar : {}, error: ""}
+    this.state = {carData: [], action : "BOOKING_PAGE", assignedCar : {}, error: ""}
     this.fullFillRequest = this.fullFillRequest.bind(this)
     this.endTheTrip = this.endTheTrip.bind(this)
     this.goBackToBookingPage = this.goBackToBookingPage.bind(this)
+  }
+
+  componentWillMount(){
+    axios.get('car-list')
+      .then((response) => {     
+          this.setState({carData: response.data})
+      })
+      .catch(error => {
+        this.setState({error})
+      })
   }
 
   fullFillRequest(event){
@@ -24,7 +35,7 @@ export default class Home extends React.Component{
       axios.post('cab-request', customerReq)
       .then((response) => {     
         if(response.data.availabilityStatus === "CAR ASSIGNED")
-          this.setState({action : "END_THE_TRIP_PAGE", assignedCar: response.data.assignedCarDetails, error: ""})
+          this.setState({action : "END_THE_TRIP_PAGE", assignedCar: response.data.assignedCarDetails, error: "", carData: response.data.carList.carData})
         else
           this.setState({action : "NO_CAB_AVAILABLE_PAGE", error: ""})
       })
@@ -49,7 +60,7 @@ export default class Home extends React.Component{
       carID: this.state.assignedCar.id
     })
     .then(res => {
-        this.setState({action : "Trip_Ended_PAGE", error: ""})      
+        this.setState({action : "Trip_Ended_PAGE", error: "", carData: res.data.carList})      
     })
     .catch(error => {
         this.setState({error})
@@ -66,6 +77,7 @@ export default class Home extends React.Component{
         return(
           <div>
               <h1>CAB-SERVICE</h1>
+              <CarList carData={this.state.carData}/>
               <h3>Privide Your Details</h3>
               <h4>{this.state.error}</h4>              
               <div className='form'>
@@ -86,6 +98,7 @@ export default class Home extends React.Component{
           <div>
               <h1>CAB-SERVICE</h1>
               <h3>!!!!Congrats CAB ASSIGNED !!!!</h3>
+              <CarList carData={this.state.carData}/>
               <h4>{this.state.error}</h4>                            
               <div>{console.log(this.state.assignedCar)}</div>       
               <button onClick={this.endTheTrip}>END THIS TRIP</button>
@@ -95,6 +108,7 @@ export default class Home extends React.Component{
         return(
           <div>
               <h1>CAB-SERVICE</h1>
+              <CarList carData={this.state.carData}/>
               <h3>!!!!Thank you for riding with us!!!!</h3>
               <h5>The Cab is available for others.</h5>
               <button onClick={this.goBackToBookingPage}>Go Back to Booking Page</button>              
@@ -104,6 +118,7 @@ export default class Home extends React.Component{
         return(
           <div>
             <h1>CAB-SERVICE</h1>
+            <CarList carData={this.state.carData}/>
             <h4>!!!!SORRY NO CAB AVAILABLE!!!!</h4>            
           </div>
         )

@@ -18,7 +18,7 @@ function readThenWriteBackInTheCarDataFile(reqBody, carDataModifyingFunction, ca
     }
     var carDataObj = carDataModifyingFunction(reqBody, JSON.parse(carData))
     fs.writeFile(filePath, JSON.stringify(carDataObj.carData, null, 3), 'utf8',()=>{
-      carDataObj.carId === "NONE"  ? callBack() : callBack(carDataObj.carData, carDataObj.carId)
+      carDataObj.carId === "NONE"  ? callBack(carDataObj) : callBack(carDataObj.carData, carDataObj.carId, carDataObj)
     });
   });
 } 
@@ -59,10 +59,19 @@ function makeTheCabAvailable(reqBody, carData){
     }
 }
 
+function getCarDetails(callBack){
+  fs.readFile(filePath, 'utf8', (err, carData) => {
+    if (err) {
+      return console.log(err);
+    }
+    callBack(JSON.parse(carData))
+  })
+}
+
 module.exports = {
     getMinDistanceCab,
     endTheTrip,
     assignRequestedCab,
-    makeTheCabAvailable
+    makeTheCabAvailable,
+    getCarDetails
 }
-    

@@ -24,3 +24,37 @@ button{
 h4{
     color: red;
 }
+
+.margin-car{
+    margin: 10px;
+}
+
+.border{
+    border: 1px solid black;
+}
+
+.padding-car{
+    padding: 0px 20px;
+}
+
+.car-avail{
+    padding: 0px 10px;
+    background: green;
+}
+
+.car-not-avail{
+    padding: 0px 10px;
+    background: brown;
+}
+
+.bk-color-pink{
+    background: pink;
+}
+
+.bk-color-white{
+    background: whitesmoke;
+}
+
+.bk-color-black{
+    background: black;
+}
